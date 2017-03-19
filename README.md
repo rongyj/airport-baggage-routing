@@ -61,14 +61,14 @@ Example Output:
 0004 A8 A9 A10 A5 : 6
 0005 A7 A8 A9 A10 A5 BaggageClaim : 12
 ```
-#Dijkstra Algorithm
+# Dijkstra Algorithm
 This algorithm is derived from Wikipedia section 'Using a priority queue'.
 https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Using_a_priority_queue
 This implementation finds the single path from a source to all reachable vertices.
 Building the graph from a set of edges takes O(E log V) for each pass.
 Vertices are stored in a TreeSet (self-balancing binary search tree) instead of a PriorityQueue (a binary heap) in order to get O(log n) performance for removal of any element, not just the head. Decreasing the distance of a vertex is accomplished by removing it from the tree and later re-inserting it.
 
-#Usage:
+# Usage:
 ```
 1. git clone https://github.com/rongyj/airport-baggage-routing.git
 2. cd airport-baggage-routing;
