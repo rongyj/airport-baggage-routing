@@ -1,6 +1,11 @@
 package com.rong.interviews.airportbaggagerouting.model;
 
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 
 /**
  * Created by rongyj on 3/18/17.
@@ -45,6 +50,20 @@ public class DijkstraGraphMap {
         }
 
         dijkstra(queue);
+    }
+
+    /**
+     * Get the shortest path as a list of Vertex for a specific destination Vertex with name as endName
+     * @param endName the destination vertex name
+     * @return the shortest path as a List<Vertex>
+     */
+
+    public List<Vertex> getShortestPath(String endName){
+        if (!graphMap.containsKey(endName)) {
+            throw new DijkstraGraphMapException("Graph doesn't contain end vertex : "+endName);
+        }
+
+        return graphMap.get(endName).getShortestPathTo();
     }
 
     // Implementation of dijkstra's algorithm using a binary heap.
