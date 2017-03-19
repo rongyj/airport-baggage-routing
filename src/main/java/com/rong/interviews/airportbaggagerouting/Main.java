@@ -7,7 +7,11 @@ import com.rong.interviews.airportbaggagerouting.model.Vertex;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,13 +30,13 @@ public class Main {
                 try {
                     scan = new Scanner(inputDataFile);
                 }catch (FileNotFoundException fnfex){
-                    promptAndParse();
+                    scan=promptAndParse();
                 }
             }else{
-               promptAndParse();
+               scan=promptAndParse();
             }
         }else
-            promptAndParse();
+            scan=promptAndParse();
         if(scan != null){
             List<DirectedEdge> edges= parseInputGraph(scan);
             Map<String,String> departuresMap=parseInputDepartures(scan); //Map with the flight as the key and the destination gate as the value
@@ -77,13 +81,7 @@ public class Main {
     private static Scanner promptAndParse(){
         System.out.println("Please input the data here:");
         Scanner scan = new Scanner(System.in);
-        String next = scan.nextLine();
-        if(next.startsWith(INPUT_DATA_SECTION_HEAD)){
-            scan.reset();
-            return scan;
-        }else{
-            throw new IllegalArgumentException("Illegal arguments or inputs. Please refer to readme for the input data format.");
-        }
+        return scan;
     }
 
     private static List<DirectedEdge> parseInputGraph(Scanner scanner){
@@ -134,7 +132,8 @@ public class Main {
                 Bag bag= new Bag(parts[0],parts[1],parts[2]);
                 bagList.add(bag);
             }else{
-                throw new IllegalArgumentException("Illegal arguments or inputs. Please refer to readme for the input data format.");
+                scanner.close();
+                break;
             }
         }while(scanner.hasNextLine());
         return bagList;
