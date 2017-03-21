@@ -39,44 +39,29 @@ public class Main {
             scan=promptAndParse();
         if(scan != null){
             List<DirectedEdge> edges= parseInputGraph(scan);
+            DijkstraAlgorithm dijkstraAlgorithm = DijkstraAlgorithmFactory.createDijkstraAlgorithm();
             Map<String,String> departuresMap=parseInputDepartures(scan); //Map with the flight as the key and the destination gate as the value
             List<Bag> bagList = parseInputBags(scan);
             scan.close();
-            Map<String, DijkstraGraphMap> visitedMap=new ConcurrentHashMap<>(); // Visited map with the sourceName as the key
             for(Bag bag:bagList){
                 String bagId=bag.getId();
                 String entryGate=bag.getEntryGate();
                 String flight = bag.getFlight();
-                DijkstraGraphMap dijkstraGraphMap;
-                if(visitedMap.containsKey(entryGate)){
-                    dijkstraGraphMap = visitedMap.get(entryGate);
-                }else {
-                    dijkstraGraphMap = new DijkstraGraphMap(edges);
-                    dijkstraGraphMap.dijkstra(entryGate);
-                    visitedMap.put(entryGate,dijkstraGraphMap);
-                }
+
                 String destGate;
                 if(flight.equals(FLIGHT_ARRIVAL)){
                     destGate=DEST_BAGGAGE_CLAIM;
                 }else{
                     destGate=departuresMap.get(flight);
                 }
-                List<Vertex> shortedPath= dijkstraGraphMap.getShortestPath(destGate);
-                outputPathLine(bagId,shortedPath);
+                String pathLine=dijkstraAlgorithm.findShortestPath(entryGate,destGate,edges);
+
+                System.out.println(bagId+SINGLE_WHITE_SPACE+pathLine);
             }
         }
 
     }
 
-    private static void outputPathLine(String bagId, List<Vertex> path){
-        StringBuffer line = new StringBuffer(bagId).append(SINGLE_WHITE_SPACE);
-
-        for(Vertex vertex:path){
-            line.append(vertex.getName()).append(SINGLE_WHITE_SPACE);
-        }
-        line.append(": ").append(path.get(path.size()-1).getTime());
-        System.out.println(line.toString());
-    }
 
     private static Scanner promptAndParse(){
         System.out.println("Please input the data here:");
